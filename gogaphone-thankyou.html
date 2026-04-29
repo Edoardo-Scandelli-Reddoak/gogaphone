@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grazie – Gogaphone</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --o1: #FF6B1A;
+  --o2: #FF8C47;
+  --o3: #FFB07A;
+  --o4: #FFF0E6;
+  --o5: #FF4D00;
+  --ink: #0F0F0F;
+  --ink2: #3A3A3A;
+  --ink3: #888;
+  --surface: #FAFAFA;
+  --white: #fff;
+  --border: rgba(0,0,0,.08);
+  --r: 14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  cursor: none;
+  overflow-x: hidden;
+}
+a, button { cursor: none; }
+
+/* ── CURSOR (desktop only) ───────────────────── */
+#cursor-dot {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--o1); pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: transform .08s, background .2s;
+  will-change: transform;
+}
+#cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--o1); pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width .25s, height .25s, opacity .25s;
+  opacity: .5; will-change: transform;
+}
+body.cursor-hover #cursor-dot { transform: translate(-50%,-50%) scale(2.2); background: var(--o5); }
+body.cursor-hover #cursor-ring { width: 60px; height: 60px; opacity: .2; }
+body.cursor-click #cursor-dot { transform: translate(-50%,-50%) scale(.4); }
+
+@media (hover: none), (pointer: coarse) {
+  body, a, button { cursor: auto; }
+  #cursor-dot, #cursor-ring { display: none; }
+}
+
+/* ── NAV ─────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(10,6,3,.55);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.logo { font-size: 19px; font-weight: 800; letter-spacing: -.5px; color: #fff; text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-link { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.6); text-decoration: none; transition: color .2s; }
+.nav-link:hover { color: #fff; }
+.nav-cta {
+  background: var(--o1); color: #fff; border: none;
+  padding: 9px 22px; border-radius: 50px;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: background .2s, transform .15s; display: inline-block;
+}
+.nav-cta:hover { background: var(--o5); transform: translateY(-1px); }
+
+/* ── HERO THANKS ─────────────────────────────── */
+.thanks {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+  padding: 100px 48px 60px;
+  position: relative; overflow: hidden;
+  background: #0A0602;
+}
+.thanks::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 80%, rgba(255,107,26,.28) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 20%, rgba(255,140,71,.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,77,0,.1) 0%, transparent 60%);
+}
+.thanks::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.thanks-glow-line {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px; z-index: 1;
+  background: linear-gradient(90deg, transparent 0%, var(--o1) 40%, var(--o2) 60%, transparent 100%);
+  opacity: .6;
+}
+.thanks-content { position: relative; z-index: 2; max-width: 720px; width: 100%; }
+
+/* Animated check */
+.thanks-check {
+  width: 96px; height: 96px; margin: 0 auto 32px;
+  border-radius: 50%;
+  background: rgba(255,107,26,.12);
+  border: 1px solid rgba(255,107,26,.4);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  animation: pop .6s cubic-bezier(.2,.8,.2,1.2) .1s both;
+}
+.thanks-check::before {
+  content: '';
+  position: absolute; inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,26,.35) 0%, transparent 70%);
+  z-index: -1;
+  animation: pulse 2.4s ease-out infinite;
+}
+@keyframes pop {
+  0% { transform: scale(.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes pulse {
+  0% { transform: scale(.85); opacity: .9; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.thanks-check svg { width: 46px; height: 46px; }
+.thanks-check svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw .55s ease-out .4s forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.thanks-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,107,26,.15); color: var(--o2);
+  border: 1px solid rgba(255,107,26,.3);
+  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 50px;
+  margin-bottom: 28px;
+}
+.thanks-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--o1);
+  animation: blink 1.6s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+.thanks h1 {
+  font-size: clamp(40px, 6vw, 76px);
+  font-weight: 900; line-height: 1.0; letter-spacing: -2.5px;
+  color: #fff;
+  margin-bottom: 24px;
+}
+.thanks h1 em { font-style: normal; color: var(--o2); }
+.thanks-sub {
+  font-size: 17px; font-weight: 400; color: rgba(255,255,255,.6);
+  line-height: 1.65; max-width: 520px; margin: 0 auto 40px;
+}
+.thanks-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--o1); color: #fff; border: none;
+  padding: 15px 32px; border-radius: 50px;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 9px;
+  box-shadow: 0 0 32px rgba(255,107,26,.35);
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.btn-primary:hover { background: var(--o5); transform: translateY(-2px); box-shadow: 0 0 48px rgba(255,107,26,.5); }
+.btn-ghost-dark {
+  background: rgba(255,255,255,.07); color: rgba(255,255,255,.8);
+  border: 1px solid rgba(255,255,255,.15);
+  padding: 15px 32px; border-radius: 50px;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+  text-decoration: none; display: inline-block;
+  transition: border-color .2s, background .2s, transform .15s;
+}
+.btn-ghost-dark:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.12); transform: translateY(-2px); }
+
+/* ── MOBILE ──────────────────────────────────── */
+@media(max-width:760px){
+  nav { padding: 0 18px; }
+  .nav-right { gap: 14px; }
+  .nav-link { display: none; }
+  .nav-cta { padding: 8px 16px; font-size: 12px; }
+
+  .thanks { padding: 90px 22px 40px; }
+  .thanks-check { width: 76px; height: 76px; margin-bottom: 22px; }
+  .thanks-check svg { width: 36px; height: 36px; }
+  .thanks-eyebrow { margin-bottom: 20px; font-size: 10px; padding: 5px 14px; }
+  .thanks-sub { font-size: 15px; margin-bottom: 28px; }
+  .thanks-actions { width: 100%; flex-direction: column; gap: 10px; }
+  .thanks-actions a { width: 100%; justify-content: center; padding: 14px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="/" style="display:flex;align-items:center;">
+    <img src="logogogaphone.png" alt="Gogaphone" style="height:30px;width:auto;object-fit:contain;">
+  </a>
+  <div class="nav-right">
+    <a href="https://wa.me/393274190715" target="_blank" rel="noopener" class="nav-link">WhatsApp</a>
+    <a href="/" class="nav-cta">← Torna alla home</a>
+  </div>
+</nav>
+
+<!-- THANKS HERO -->
+<section class="thanks">
+  <div class="thanks-glow-line"></div>
+  <div class="thanks-content">
+    <div class="thanks-check" aria-hidden="true">
+      <svg viewBox="0 0 48 48" fill="none">
+        <path d="M14 24l7 7 13-14" stroke="#FF8C47" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="thanks-eyebrow">
+      <span class="thanks-eyebrow-dot"></span>
+      Richiesta ricevuta
+    </div>
+    <h1>Grazie!<br><em>Ti ricontattiamo presto.</em></h1>
+    <p class="thanks-sub">La tua richiesta è arrivata correttamente. Un nostro consulente verificherà la copertura nella tua zona e ti contatterà entro 24 ore lavorative al numero che ci hai indicato.</p>
+    <div class="thanks-actions">
+      <a href="https://wa.me/393274190715" target="_blank" rel="noopener" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        Scrivici su WhatsApp
+      </a>
+      <a href="/" class="btn-ghost-dark">← Torna alla home</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
+if (!isTouch) {
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup', () => document.body.classList.remove('cursor-click'));
+}
+</script>
+</body>
+</html>
