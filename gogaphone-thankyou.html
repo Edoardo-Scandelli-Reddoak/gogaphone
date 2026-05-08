@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grazie – Gogaphone</title>
 <meta name="robots" content="noindex, nofollow">
+
+<style>
+/* Block any iubenda-injected Privacy/Cookie Policy widgets from showing at the
+   top of the page. Loaded BEFORE the iubenda script so injected elements never
+   flash. The cookie consent banner (.iub-cs-*, #iubenda-cs-banner) is allowed. */
+a[href*="iubenda.com"] { display: none !important; }
+.thanks-legal a[href*="iubenda.com/privacy-policy"] { display: inline !important; }
+.iubenda-tp-btn, .iubenda-tp-bar,
+[class^="iubenda-tp-"], [class*=" iubenda-tp-"],
+[class^="iubenda-pp-"], [class*=" iubenda-pp-"],
+[class^="iubenda-policy"], [class*=" iubenda-policy"],
+[class^="iubenda-link"], [class*=" iubenda-link"],
+.iubenda-embed { display: none !important; }
+</style>
+
 <script type="text/javascript">
 var _iub = _iub || [];
 _iub.csConfiguration = {
@@ -50,7 +65,7 @@ _iub.csConfiguration = {
               el.closest('#iubenda-iframe'));
   }
   function nuke() {
-    var nodes = document.querySelectorAll('a, button, span, div');
+    var nodes = document.querySelectorAll('a, button, span, div, p, li');
     for (var i = 0; i < nodes.length; i++) {
       var el = nodes[i];
       var t = (el.innerText || el.textContent || '').trim().toLowerCase();
@@ -61,11 +76,11 @@ _iub.csConfiguration = {
       el.style.setProperty('display', 'none', 'important');
     }
   }
-  [50, 300, 800, 1500, 3000, 5000].forEach(function (t) { setTimeout(nuke, t); });
+  [0, 50, 200, 500, 1000, 2000, 4000].forEach(function (t) { setTimeout(nuke, t); });
   document.addEventListener('DOMContentLoaded', nuke);
   window.addEventListener('load', nuke);
   if (window.MutationObserver) {
-    var obs = new MutationObserver(function () { requestAnimationFrame(nuke); });
+    var obs = new MutationObserver(nuke); /* sync — no rAF flash window */
     function start() { if (document.body) obs.observe(document.body, { childList: true, subtree: true }); }
     if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
   }
@@ -90,15 +105,6 @@ _iub.csConfiguration = {
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
-/* Hide ALL iubenda policy links auto-injected anywhere on the page... */
-a[href*="iubenda.com/privacy-policy"] { display: none !important; }
-/* ...then explicitly show the ones we placed in thanks-legal */
-.thanks-legal a[href*="iubenda.com/privacy-policy"] { display: inline !important; }
-/* Hide iubenda Trust Page / Privacy Bar widgets at page edges */
-.iubenda-tp-btn,
-.iubenda-tp-bar,
-[class^="iubenda-tp-"],
-[class*=" iubenda-tp-"] { display: none !important; }
 body {
   font-family: 'Inter', sans-serif;
   background: var(--white);
