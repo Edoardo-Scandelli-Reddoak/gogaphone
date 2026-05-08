@@ -4,44 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gogaphone – Fibra & Mobile</title>
-<script type="text/javascript" src="https://embeds.iubenda.com/widgets/8245fe86-73c5-4aba-812a-fac83856bf0d.js"></script>
 <script type="text/javascript">
-/* Cleanup: hide any iubenda-injected Privacy/Cookie Policy bar at page top.
-   Whitelist: footer-links, form-note, thanks-legal, iubenda banner modal. */
+var _iub = _iub || [];
+_iub.csConfiguration = {
+  "askConsentAtCookiePolicyUpdate": true,
+  "floatingPreferencesButtonDisplay": "bottom-right",
+  "perPurposeConsent": true,
+  "siteId": 4522063,
+  "cookiePolicyId": 34872477,
+  "lang": "it",
+  "googleConsentMode": "template",
+  "banner": {
+    "acceptButtonCaptionColor": "#FFFFFF",
+    "acceptButtonColor": "#3B29FF",
+    "acceptButtonDisplay": true,
+    "backgroundColor": "#FFFFFF",
+    "closeButtonDisplay": false,
+    "customizeButtonDisplay": true,
+    "explicitWithdrawal": true,
+    "listPurposes": true,
+    "position": "float-bottom-right",
+    "rejectButtonCaptionColor": "#FFFFFF",
+    "rejectButtonColor": "#3B29FF",
+    "rejectButtonDisplay": true,
+    "showTitle": false,
+    "textColor": "#1D1D1D",
+    "linksColor": "#03216E",
+    "primaryColor": "#3B29FF"
+  }
+};
+</script>
+<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+<script type="text/javascript">
+/* Defensive cleanup: hide any stray iubenda-injected Privacy/Cookie Policy text element
+   outside our whitelisted containers (footer-links, form-note, thanks-legal). */
 (function () {
   var KEEP = ['footer', '.footer-links', '.form-note', '.thanks-legal'];
-  function isInsideKeep(el) {
-    return KEEP.some(function (sel) { return el.closest && el.closest(sel); });
+  function isKept(el) {
+    if (!el.closest) return false;
+    return KEEP.some(function (s) { return el.closest(s); });
   }
-  function isInsideBanner(el) {
-    return el.closest && (
-      el.closest('[id*="iubenda-cs-"]') ||
-      el.closest('[class*="iub-cs-"]') ||
-      el.closest('[id*="iub-banner"]') ||
-      el.closest('#iubenda-iframe')
-    );
+  function isInBanner(el) {
+    if (!el.closest) return false;
+    return !!(el.closest('[id*="iubenda-cs-"]') ||
+              el.closest('[class*="iub-cs-"]') ||
+              el.closest('#iubenda-iframe'));
   }
-  function clean() {
+  function nuke() {
     var nodes = document.querySelectorAll('a, button, span, div');
     for (var i = 0; i < nodes.length; i++) {
       var el = nodes[i];
-      var t = (el.innerText || el.textContent || '').trim();
-      if (t !== 'Privacy Policy' && t !== 'Cookie Policy') continue;
-      if (isInsideKeep(el)) continue;
-      if (isInsideBanner(el)) continue;
-      var rect = el.getBoundingClientRect();
-      if (rect.top > 200 && rect.bottom < window.innerHeight - 200) continue; /* keep mid-page elements */
+      var t = (el.innerText || el.textContent || '').trim().toLowerCase();
+      if (t !== 'privacy policy' && t !== 'cookie policy') continue;
+      if (el.children.length > 0) continue; /* only leaf nodes */
+      if (isKept(el)) continue;
+      if (isInBanner(el)) continue;
       el.style.setProperty('display', 'none', 'important');
     }
   }
-  [50, 200, 500, 1000, 2000, 3500].forEach(function (t) { setTimeout(clean, t); });
+  [50, 300, 800, 1500, 3000, 5000].forEach(function (t) { setTimeout(nuke, t); });
+  document.addEventListener('DOMContentLoaded', nuke);
+  window.addEventListener('load', nuke);
   if (window.MutationObserver) {
-    var obs = new MutationObserver(function () { requestAnimationFrame(clean); });
+    var obs = new MutationObserver(function () { requestAnimationFrame(nuke); });
     function start() { if (document.body) obs.observe(document.body, { childList: true, subtree: true }); }
     if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
   }
-  document.addEventListener('DOMContentLoaded', clean);
-  window.addEventListener('load', clean);
 })();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
