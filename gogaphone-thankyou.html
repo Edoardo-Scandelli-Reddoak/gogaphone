@@ -6,6 +6,44 @@
 <title>Grazie – Gogaphone</title>
 <meta name="robots" content="noindex, nofollow">
 <script type="text/javascript" src="https://embeds.iubenda.com/widgets/8245fe86-73c5-4aba-812a-fac83856bf0d.js"></script>
+<script type="text/javascript">
+/* Cleanup: hide any iubenda-injected Privacy/Cookie Policy bar at page top. */
+(function () {
+  var KEEP = ['footer', '.footer-links', '.form-note', '.thanks-legal'];
+  function isInsideKeep(el) {
+    return KEEP.some(function (sel) { return el.closest && el.closest(sel); });
+  }
+  function isInsideBanner(el) {
+    return el.closest && (
+      el.closest('[id*="iubenda-cs-"]') ||
+      el.closest('[class*="iub-cs-"]') ||
+      el.closest('[id*="iub-banner"]') ||
+      el.closest('#iubenda-iframe')
+    );
+  }
+  function clean() {
+    var nodes = document.querySelectorAll('a, button, span, div');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var t = (el.innerText || el.textContent || '').trim();
+      if (t !== 'Privacy Policy' && t !== 'Cookie Policy') continue;
+      if (isInsideKeep(el)) continue;
+      if (isInsideBanner(el)) continue;
+      var rect = el.getBoundingClientRect();
+      if (rect.top > 200 && rect.bottom < window.innerHeight - 200) continue;
+      el.style.setProperty('display', 'none', 'important');
+    }
+  }
+  [50, 200, 500, 1000, 2000, 3500].forEach(function (t) { setTimeout(clean, t); });
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function () { requestAnimationFrame(clean); });
+    function start() { if (document.body) obs.observe(document.body, { childList: true, subtree: true }); }
+    if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  }
+  document.addEventListener('DOMContentLoaded', clean);
+  window.addEventListener('load', clean);
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
