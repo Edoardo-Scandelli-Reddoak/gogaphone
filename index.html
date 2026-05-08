@@ -24,10 +24,14 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
-/* Hide any iubenda-injected floating policy badges at page edges (cookie banner unaffected) */
+/* Hide ALL iubenda policy links auto-injected anywhere on the page... */
+a[href*="iubenda.com/privacy-policy"] { display: none !important; }
+/* ...then explicitly show the ones we placed in form-note and footer */
+.form-note a[href*="iubenda.com/privacy-policy"] { display: inline !important; }
+.footer-links a[href*="iubenda.com/privacy-policy"] { display: inline-block !important; }
+/* Hide iubenda Trust Page / Privacy Bar widgets at page edges */
 .iubenda-tp-btn,
 .iubenda-tp-bar,
-.iubenda-tp-pill,
 [class^="iubenda-tp-"],
 [class*=" iubenda-tp-"] { display: none !important; }
 body {
