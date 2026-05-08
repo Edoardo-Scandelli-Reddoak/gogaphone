@@ -25,6 +25,13 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
+/* Hide any iubenda-injected floating policy badges at page edges (cookie banner unaffected) */
+.iubenda-tp-btn,
+.iubenda-tp-bar,
+.iubenda-tp-pill,
+[class^="iubenda-tp-"],
+[class*=" iubenda-tp-"] { display: none !important; }
 body {
   font-family: 'Inter', sans-serif;
   background: var(--white);
@@ -264,8 +271,8 @@ nav {
     </div>
   </div>
   <div class="thanks-legal">
-    <a href="https://www.iubenda.com/privacy-policy/34872477" class="iubenda-white iubenda-noiframe iubenda-embed" title="Privacy Policy">Privacy Policy</a>
-    <a href="https://www.iubenda.com/privacy-policy/34872477/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed" title="Cookie Policy">Cookie Policy</a>
+    <a href="https://www.iubenda.com/privacy-policy/34872477" class="iubenda-nostyle iubenda-noiframe iubenda-embed" title="Privacy Policy">Privacy Policy</a>
+    <a href="https://www.iubenda.com/privacy-policy/34872477/cookie-policy" class="iubenda-nostyle iubenda-noiframe iubenda-embed" title="Cookie Policy">Cookie Policy</a>
   </div>
 </section>
 
