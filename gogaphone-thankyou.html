@@ -6,18 +6,16 @@
 <title>Grazie – Gogaphone</title>
 <meta name="robots" content="noindex, nofollow">
 
-<style>
-/* Block any iubenda-injected Privacy/Cookie Policy widgets from showing at the
-   top of the page. Loaded BEFORE the iubenda script so injected elements never
-   flash. The cookie consent banner (.iub-cs-*, #iubenda-cs-banner) is allowed. */
+<style id="iubenda-shield">
 a[href*="iubenda.com"] { display: none !important; }
 .thanks-legal a[href*="iubenda.com/privacy-policy"] { display: inline !important; }
-.iubenda-tp-btn, .iubenda-tp-bar,
+.iubenda-tp-btn, .iubenda-tp-bar, .iubenda-pp-btn, .iubenda-policy-btn,
 [class^="iubenda-tp-"], [class*=" iubenda-tp-"],
 [class^="iubenda-pp-"], [class*=" iubenda-pp-"],
 [class^="iubenda-policy"], [class*=" iubenda-policy"],
 [class^="iubenda-link"], [class*=" iubenda-link"],
-.iubenda-embed { display: none !important; }
+.iubenda-embed, .iubenda-white, .iubenda-black, .iubenda-nostyle { display: none !important; }
+iframe[src*="iubenda.com"]:not([id*="iubenda-cs"]):not([class*="iub-cs"]) { display: none !important; }
 </style>
 
 <script type="text/javascript">
@@ -62,25 +60,41 @@ _iub.csConfiguration = {
     if (!el.closest) return false;
     return !!(el.closest('[id*="iubenda-cs-"]') ||
               el.closest('[class*="iub-cs-"]') ||
-              el.closest('#iubenda-iframe'));
+              el.closest('#iubenda-iframe') ||
+              el.closest('[id*="iub-pp-"]'));
   }
   function nuke() {
-    var nodes = document.querySelectorAll('a, button, span, div, p, li');
+    var nodes = document.querySelectorAll('*');
     for (var i = 0; i < nodes.length; i++) {
       var el = nodes[i];
-      var t = (el.innerText || el.textContent || '').trim().toLowerCase();
+      if (!el || !el.parentNode) continue;
+      var raw = el.innerText || el.textContent || '';
+      var t = raw.trim().toLowerCase();
       if (t !== 'privacy policy' && t !== 'cookie policy') continue;
-      if (el.children.length > 0) continue;
       if (isKept(el)) continue;
       if (isInBanner(el)) continue;
-      el.style.setProperty('display', 'none', 'important');
+      try { el.parentNode.removeChild(el); } catch (e) { el.style.setProperty('display', 'none', 'important'); }
     }
+    document.querySelectorAll('body > *').forEach(function (el) {
+      if (el.tagName === 'NAV' && !el.classList.contains('footer-links')) return;
+      if (el.tagName === 'FOOTER') return;
+      if (el.id && /iubenda-cs|iub-cs|iub-pp/i.test(el.id)) return;
+      if (el.className && typeof el.className === 'string' && /iub-cs|iubenda-cs/.test(el.className)) return;
+      var cs = getComputedStyle(el);
+      if ((cs.position === 'fixed' || cs.position === 'sticky') && parseFloat(cs.top || '999') < 80) {
+        var txt = (el.innerText || el.textContent || '').toLowerCase();
+        if (txt.indexOf('privacy policy') !== -1 || txt.indexOf('cookie policy') !== -1) {
+          try { el.parentNode.removeChild(el); } catch (e) { el.style.setProperty('display', 'none', 'important'); }
+        }
+      }
+    });
   }
-  [0, 50, 200, 500, 1000, 2000, 4000].forEach(function (t) { setTimeout(nuke, t); });
+  [0, 50, 150, 400, 800, 1500, 3000, 5000].forEach(function (t) { setTimeout(nuke, t); });
+  setInterval(nuke, 800);
   document.addEventListener('DOMContentLoaded', nuke);
   window.addEventListener('load', nuke);
   if (window.MutationObserver) {
-    var obs = new MutationObserver(nuke); /* sync — no rAF flash window */
+    var obs = new MutationObserver(nuke);
     function start() { if (document.body) obs.observe(document.body, { childList: true, subtree: true }); }
     if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
   }
